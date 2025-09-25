@@ -40,7 +40,7 @@ export default function LandingPage() {
                 affect the period and energy conservation.
               </p>
               <div className="video-container">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Pendulum Physics Demo" allowFullScreen />
+                <iframe src="hhttps://www.youtube.com/embed/1Q15fgz-lUk?si=75oxZc0LWWH2ufSi" title="Pendulum Physics Demo" allowFullScreen />
               </div>
               <Link className="btn btn-ghost" href="/register">
                 Try Simulation
@@ -54,7 +54,7 @@ export default function LandingPage() {
                 Ohm's law fundamentals.
               </p>
               <div className="video-container">
-                <iframe src="https://www.youtube.com/embed/dQw4w9WgXcQ" title="Circuit Physics Demo" allowFullScreen />
+                <iframe src="https://www.youtube.com/embed/r-SCyD7f_zI?si=XgMU-e0mykDdDQnz" title="Circuit Physics Demo" allowFullScreen />
               </div>
               <Link className="btn btn-ghost" href="/register">
                 Try Simulation
@@ -69,7 +69,7 @@ export default function LandingPage() {
               </p>
               <div className="video-container">
                 <iframe
-                  src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                  src="https://www.youtube.com/embed/1eRimU5befo?si=IWeBpujHAQewFJnJ"
                   title="Projectile Motion Demo"
                   allowFullScreen
                 />

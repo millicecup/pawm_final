@@ -54,7 +54,7 @@ export default function LandingPage() {
               </p>
               <div className="video-container">
                 <iframe 
-                  src="https://www.youtube.com/embed/yVkdfJ9PkRQ" 
+                  src="https://www.youtube.com/embed/1Q15fgz-lUk?si=75oxZc0LWWH2ufSi" 
                   title="Simple Pendulum Physics Explained" 
                   allowFullScreen 
                 />
@@ -72,7 +72,7 @@ export default function LandingPage() {
               </p>
               <div className="video-container">
                 <iframe 
-                  src="https://www.youtube.com/embed/8mAITcNt710" 
+                  src="https://www.youtube.com/embed/r-SCyD7f_zI?si=XgMU-e0mykDdDQnz" 
                   title="Ohm's Law and Electrical Circuits" 
                   allowFullScreen 
                 />
@@ -90,7 +90,7 @@ export default function LandingPage() {
               </p>
               <div className="video-container">
                 <iframe 
-                  src="https://www.youtube.com/embed/R-WdnCJLhQE" 
+                  src="https://www.youtube.com/embed/1eRimU5befo?si=IWeBpujHAQewFJnJ" 
                   title="Projectile Motion Physics" 
                   allowFullScreen 
                 />
@@ -120,7 +120,7 @@ export default function LandingPage() {
               <p>Hands‑on experimentation with adjustable parameters to explore cause‑and‑effect relationships.</p>
             </div>
             <div className="feature">
-              <div className="feature-icon">�</div>
+              <div className="feature-icon">📑</div>
               <h3>Data Analysis</h3>
               <p>Built‑in graphing and measurement tools to analyze results and understand physical phenomena.</p>
             </div>

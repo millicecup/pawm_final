@@ -126,18 +126,18 @@ class ApiClient {
 
   // User endpoints
   async getProfile(): Promise<{ user: User }> {
-    return this.request('/users/profile');
+    return this.request('/user/profile');
   }
 
   async updateProfile(userData: Partial<User>): Promise<{ user: User; message: string }> {
-    return this.request('/users/profile', {
+    return this.request('/user/profile', {
       method: 'PUT',
       body: JSON.stringify(userData),
     });
   }
 
   async getUserStats(): Promise<ApiResponse> {
-    return this.request('/users/stats');
+    return this.request('/user/stats');
   }
 
   // Progress endpoints
@@ -159,11 +159,11 @@ class ApiClient {
 
   // Simulation endpoints
   async getSimulations(): Promise<ApiResponse> {
-    return this.request('/simulations');
+    return this.request('/simulations/list');
   }
 
   async getSimulation(simulationId: string): Promise<ApiResponse> {
-    return this.request(`/simulations/${simulationId}`);
+    return this.request(`/simulations/list/${simulationId}`);
   }
 }
 

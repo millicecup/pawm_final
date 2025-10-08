@@ -33,6 +33,7 @@ export default function CircuitSimulation() {
     const loopLen = 2 * (trackW + trackH)
 
     function draw() {
+      if (!ctx) return;
       ctx.fillStyle = "#111"
       ctx.fillRect(0, 0, width, height)
 

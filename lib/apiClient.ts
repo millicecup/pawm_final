@@ -35,7 +35,7 @@ class ApiClient {
   private token: string | null;
 
   constructor() {
-    this.baseURL = API_BASE_URL;
+    this.baseURL = 'https://vlab-backend.vercel.app/api';
     this.token = null;
     
     // Load token from localStorage if available
@@ -66,9 +66,14 @@ class ApiClient {
     
     return headers;
   }
-
+  async testConnection() {
+    console.log('Testing connection to:', `${this.baseURL}/health`);
+    const response = await fetch(`${this.baseURL}/health`);
+    return response.json();
+  }
   private async request<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
+    console.log('API Request URL:', url); // Debug log
     const config: RequestInit = {
       headers: this.getHeaders(),
       ...options,

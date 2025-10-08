@@ -66,9 +66,15 @@ class ApiClient {
     
     return headers;
   }
+  async testConnection() {
+    console.log('Testing connection to:', `${this.baseURL}/health`);
+    const response = await fetch(`${this.baseURL}/health`);
+    return response.json();
+  }
 
   private async request<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
+    console.log('API Request URL:', url); // Debug log
     const config: RequestInit = {
       headers: this.getHeaders(),
       ...options,

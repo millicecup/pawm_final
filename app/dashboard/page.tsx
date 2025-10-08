@@ -2,29 +2,78 @@
 
 import { useAuth } from "../../source/lib/auth"
 import { useRouter } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import Link from "next/link"
 import Header from "../../source/components/Header"
+import { apiClient } from "../../lib/api/client"
+
+interface ProgressStats {
+  experimentsCompleted: string
+  totalExperiments: number
+  studyTime: number
+  achievementLevel: string
+  averageScore: number
+}
 
 export default function DashboardPage() {
-  const { user } = useAuth()
+  const { user, loading } = useAuth()
   const router = useRouter()
+  const [progressStats, setProgressStats] = useState<ProgressStats | null>(null)
+  const [statsLoading, setStatsLoading] = useState(true)
 
   useEffect(() => {
-    if (!user) {
+    if (!loading && !user) {
       router.push("/login")
     }
-  }, [user, router])
+  }, [user, loading, router])
 
-  if (!user) {
+  useEffect(() => {
+    const fetchProgressStats = async () => {
+      if (user) {
+        try {
+          const response = await apiClient.getProgressStats()
+          console.log('API Response:', response) // Debug log
+          
+          // Map backend data to dashboard format:
+          setProgressStats({
+            experimentsCompleted: `${response.completedSimulations}/${response.totalSimulations}`,
+            totalExperiments: response.totalSimulations || 0,
+            studyTime: response.totalTimeSpent || 0,
+            achievementLevel: 'Physics Explorer',
+            averageScore: response.averageScore || 0
+          })
+        } catch (error) {
+          console.error('Failed to fetch progress stats:', error)
+          // Set default stats on error
+          setProgressStats({
+            experimentsCompleted: '0/3',
+            totalExperiments: 0,
+            studyTime: 0,
+            achievementLevel: 'Physics Explorer',
+            averageScore: 0
+          })
+        } finally {
+          setStatsLoading(false)
+        }
+      }
+    }
+
+    fetchProgressStats()
+  }, [user])
+
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
         <div className="text-center">
           <h1 className="text-2xl font-bold mb-4">Loading...</h1>
-          <p>Redirecting to login...</p>
+          <p>Checking authentication...</p>
         </div>
       </div>
     )
+  }
+
+  if (!user) {
+    return null // Will redirect via useEffect
   }
 
   return (
@@ -153,21 +202,51 @@ export default function DashboardPage() {
             className="grid"
             style={{ gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))", maxWidth: "800px" }}
           >
-            <div className="card">
-              <h4 style={{ color: "var(--primary)" }}>Experiments Completed</h4>
-              <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>3/3</div>
-              <p style={{ margin: 0, fontSize: "0.9rem" }}>All simulations unlocked!</p>
-            </div>
-            <div className="card">
-              <h4 style={{ color: "var(--secondary)" }}>Study Time</h4>
-              <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>2.5h</div>
-              <p style={{ margin: 0, fontSize: "0.9rem" }}>This week</p>
-            </div>
-            <div className="card">
-              <h4 style={{ color: "var(--accent)" }}>Achievement Level</h4>
-              <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>Expert</div>
-              <p style={{ margin: 0, fontSize: "0.9rem" }}>Physics Explorer</p>
-            </div>
+            {statsLoading ? (
+              <>
+                <div className="card">
+                  <h4 style={{ color: "var(--primary)" }}>Loading...</h4>
+                  <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>--</div>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>Fetching data...</p>
+                </div>
+                <div className="card">
+                  <h4 style={{ color: "var(--secondary)" }}>Loading...</h4>
+                  <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>--</div>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>Fetching data...</p>
+                </div>
+                <div className="card">
+                  <h4 style={{ color: "var(--accent)" }}>Loading...</h4>
+                  <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>--</div>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>Fetching data...</p>
+                </div>
+              </>
+            ) : (
+              <>
+                <div className="card">
+                  <h4 style={{ color: "var(--primary)" }}>Experiments Completed</h4>
+                  <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>
+                    {progressStats?.experimentsCompleted || '0/3'}
+                  </div>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>
+                    {progressStats?.experimentsCompleted === '3/3' ? 'All simulations unlocked!' : 'Keep exploring!'}
+                  </p>
+                </div>
+                <div className="card">
+                  <h4 style={{ color: "var(--secondary)" }}>Study Time</h4>
+                  <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>
+                    {progressStats?.studyTime || 0}h
+                  </div>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>Total time</p>
+                </div>
+                <div className="card">
+                  <h4 style={{ color: "var(--accent)" }}>Achievement Level</h4>
+                  <div style={{ fontSize: "2rem", fontWeight: "700", color: "var(--fg)", margin: "0.5rem 0" }}>
+                    {progressStats?.averageScore || 0}
+                  </div>
+                  <p style={{ margin: 0, fontSize: "0.9rem" }}>{progressStats?.achievementLevel || 'Physics Explorer'}</p>
+                </div>
+              </>
+            )}
           </div>
         </section>
       </main>

@@ -2,7 +2,7 @@
 
 import Link from "next/link"
 import Image from "next/image"
-import { useAuth } from "@/source/lib/auth"
+import { useAuth } from "../lib/auth"
 
 interface HeaderProps {
   showAuthNav?: boolean
@@ -22,6 +22,7 @@ export default function Header({ showAuthNav = false }: HeaderProps) {
         {showAuthNav && user && (
           <nav className="main-nav" aria-label="Main">
             <Link href="/dashboard">Dashboard</Link>
+            <Link href="/achievements">🏆 Achievements</Link>
             <Link href="/progress">Progress</Link>
             <Link href="/profile">Profile</Link>
             <button onClick={logout} className="btn btn-ghost" style={{ padding: ".5rem .75rem", fontSize: "0.9rem" }}>

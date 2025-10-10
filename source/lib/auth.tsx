@@ -23,9 +23,17 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined)
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [user, setUser] = useState<User | null>(null)
   const [loading, setLoading] = useState(true)
+  const [mounted, setMounted] = useState(false)
 
-  // Verify token on mount
+  // Wait for client-side mount before accessing localStorage
   useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  // Verify token on mount (only on client side)
+  useEffect(() => {
+    if (!mounted) return
+
     const verifyUser = async () => {
       try {
         const token = localStorage.getItem('auth_token')
@@ -42,7 +50,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
 
     verifyUser()
-  }, [])
+  }, [mounted])
 
   const login = async (email: string, password: string): Promise<void> => {
     try {
@@ -77,7 +85,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       console.error('Logout error:', error)
     } finally {
       setUser(null)
+      if (typeof window !== 'undefined') {
+        localStorage.removeItem('auth_token')
+      }
     }
+  }
+
+
+  if (!mounted) {
+    return null
   }
 
   return <AuthContext.Provider value={{ user, login, register, logout, loading }}>{children}</AuthContext.Provider>

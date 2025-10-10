@@ -75,7 +75,7 @@ export default function ProgressPage() {
         try {
           const response = await apiClient.getProgressStats()
           console.log('Progress API response:', response)
-          setProgressData(response.data)
+          setProgressData(response)
           
           // Update simulations based on API data
           // For now, since we don't have individual simulation tracking,

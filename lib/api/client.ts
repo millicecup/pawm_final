@@ -1,5 +1,5 @@
 const API_BASE_URL = 'https://vlab-backend.vercel.app/api'
-// Health check can be implemented as a method in ApiClient if needed
+
 interface LoginCredentials {
   email: string;
   password: string;
@@ -66,15 +66,19 @@ class ApiClient {
     
     return headers;
   }
+
+  // Test connection method
   async testConnection() {
     console.log('Testing connection to:', `${this.baseURL}/health`);
     const response = await fetch(`${this.baseURL}/health`);
     return response.json();
   }
 
+  // Main request method
   private async request<T = any>(endpoint: string, options: RequestInit = {}): Promise<T> {
     const url = `${this.baseURL}${endpoint}`;
     console.log('API Request URL:', url); // Debug log
+    
     const config: RequestInit = {
       headers: this.getHeaders(),
       ...options,
@@ -132,11 +136,11 @@ class ApiClient {
 
   // User endpoints
   async getProfile(): Promise<{ user: User }> {
-    return this.request('/users/profile');
+    return this.request('/user/profile');
   }
 
   async updateProfile(userData: Partial<User>): Promise<{ user: User; message: string }> {
-    return this.request('/users/profile', {
+    return this.request('/user/profile', {
       method: 'PUT',
       body: JSON.stringify(userData),
     });
@@ -165,7 +169,7 @@ class ApiClient {
 
   // Simulation endpoints
   async getSimulations(): Promise<ApiResponse> {
-    return this.request('/simulations');
+    return this.request('/simulations/list');
   }
 
   async getSimulation(simulationId: string): Promise<ApiResponse> {
